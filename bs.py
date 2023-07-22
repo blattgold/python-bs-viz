@@ -85,7 +85,6 @@ class Bs:
         if self.current_search_index != len(self.to_sort) -1:
             self.current_search_index += 1
         else:
-            self.current_search_index = 0
             self.shown_off = True
 
 class Viz:
@@ -98,14 +97,19 @@ class Viz:
             self.synth(self.bs.to_sort[self.bs.current_search_index])
 
     def draw(self, screen):
+        '''
+        draws the sort list as rectangles
+        element height: list_element * SCREEN_H
+        element width: SCREEN_W / list_length  
+        '''
         for x in range(len(self.bs.to_sort)):
-            color = (0,0,0)
-            if x == self.bs.current_search_index:
-                color = (200,0,0)
-            if x+1 == self.bs.current_search_index and self.bs.swapped:
-                color = (50,50,100)
+            color = (0,0,0) # base color of all elements
             if self.bs.shown_off:
-                color = (100,100,200)
+                color = (100,100,200) # replacement color for all elements after shown off (search completed)
+            elif x == self.bs.current_search_index:
+                color = (200,0,0) # color for current step item in search
+            elif x+1 == self.bs.current_search_index and self.bs.swapped:
+                color = (50,50,100) # color for swapped item
 
             pygame.draw.rect(screen,
                              color,
@@ -139,7 +143,7 @@ def main():
     clock = pygame.time.Clock()
     running = True
 
-    viz = Viz(25)
+    viz = Viz(20)
 
     while running:
         clock.tick(2)
